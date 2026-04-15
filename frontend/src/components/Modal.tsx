@@ -10,32 +10,32 @@ type ModalProps = {
 };
 
 export const Modal = (props: ModalProps) => {
-    const dialogRef = useRef<HTMLDialogElement>(null);
+  const dialogRef = useRef<HTMLDialogElement>(null);
 
-    useEffect(() => {
-      if (props.open) {
-        dialogRef.current?.showModal();
-      } else {
-        dialogRef.current?.close();
-      }
-    }, [props.open]);
+  useEffect(() => {
+    if (props.open) {
+      dialogRef.current?.showModal();
+    } else {
+      dialogRef.current?.close();
+    }
+  }, [props.open]);
 
   return (
     <>
-        <dialog ref={dialogRef} className="modal">
-            <div className="modal-box">
-                <h3 className="font-bold text-lg">{props.title}</h3>
-                <div className="py-4">{props.children}</div>
-                {props.showClose && (
-                    <div className="modal-action">
-                        <button className="btn" onClick={props.onClose}>Close</button>
-                    </div>
-                )}
+      <dialog ref={dialogRef} className="modal">
+        <div className="modal-box">
+          <h3 className="font-bold text-lg">{props.title}</h3>
+          <div className="py-4">{props.children}</div>
+          {props.showClose && (
+            <div className="modal-action">
+              <button className="btn" onClick={props.onClose}>Close</button>
             </div>
-            <form method="dialog" className="modal-backdrop">
-                <button onClick={props.onClose}>close</button>
-            </form>
-        </dialog>
+          )}
+        </div>
+        <form method="dialog" className="modal-backdrop">
+          <button onClick={props.onClose}>close</button>
+        </form>
+      </dialog>
     </>
   );
 };

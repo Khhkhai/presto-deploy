@@ -1,11 +1,6 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { useState } from "react";
 import { Modal } from "./components/Modal";
-
-type ErrorModalContextType = {
-  showError: (message: string) => void;
-};
-
-const ErrorModalContext = createContext<ErrorModalContextType | null>(null);
+import { ErrorModalContext } from "./utils/useErrorModal"
 
 export const ErrorModalProvider = ({ children }: { children: React.ReactNode }) => {
   const [errorMessage, setErrorMessage] = useState("");
@@ -17,7 +12,6 @@ export const ErrorModalProvider = ({ children }: { children: React.ReactNode }) 
   };
 
   return (
-    // global var
     <ErrorModalContext.Provider value={{ showError }}>
       {children}
       <Modal open={isOpen} onClose={() => setIsOpen(false)} title="Error" showClose={true}>
@@ -27,8 +21,3 @@ export const ErrorModalProvider = ({ children }: { children: React.ReactNode }) 
   );
 };
 
-export const useErrorModal = () => {
-  const errorModal = useContext(ErrorModalContext);
-  if (!errorModal) throw new Error("useErrorModal must be used within ErrorModalProvider");
-  return errorModal;
-};

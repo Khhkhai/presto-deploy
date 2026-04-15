@@ -8,9 +8,9 @@ import { ErrorModalProvider } from "./ErrorModalContext.tsx";
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
-        <ErrorModalProvider>
-            <App />
-        </ErrorModalProvider>
+      <ErrorModalProvider>
+        <App />
+      </ErrorModalProvider>
     </BrowserRouter>
   </StrictMode>,
 )
