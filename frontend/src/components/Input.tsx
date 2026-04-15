@@ -2,12 +2,12 @@ type InputProps = {
     label?: string;
     value?: string;
     defaultValue?: string | number;
-    onChange?: (value: string) => void;
+    onChange?: (_value: string) => void;
     type: "text" | "email" | "password" | "number" | "color";
     id: string;
     className?: string;
     required?: boolean;
-    onBlur?: (value: string) => void;
+    onBlur?: (_value: string) => void;
     min?: number;
     max?: number;
 }
