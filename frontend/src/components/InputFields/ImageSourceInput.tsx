@@ -8,51 +8,48 @@ type ImageSourceInputProps = {
     imageFile: File | null; setImageFile: (_imageFile: File | null) => void;
 };
 
-export const ImageSourceInput = React.forwardRef<FileInputHandle, ImageSourceInputProps>(
-  (props, ref) => {
-    const { imageSourceType, setImageSourceType, setImageFile, url, setUrl } = props;
-
-    return (
-      <>
-        <div className="tabs tabs-boxed">
-          <button
-            type="button"
-            className={`tab ${imageSourceType === 'file' ? 'tab-active' : ''}`}
-            onClick={() => setImageSourceType('file')}
-          >
+export const ImageSourceInput = React.forwardRef<FileInputHandle, ImageSourceInputProps>((props, ref) => {
+  return (
+    <>
+      <div className="tabs tabs-boxed">
+        <button
+          type="button"
+          className={`tab ${props.imageSourceType === 'file' ? 'tab-active' : ''}`}
+          onClick={() => props.setImageSourceType('file')}
+        >
             Upload File
-          </button>
-          <button
-            type="button"
-            className={`tab ${imageSourceType === 'url' ? 'tab-active' : ''}`}
-            onClick={() => setImageSourceType('url')}
-          >
+        </button>
+        <button
+          type="button"
+          className={`tab ${props.imageSourceType === 'url' ? 'tab-active' : ''}`}
+          onClick={() => props.setImageSourceType('url')}
+        >
             From URL
-          </button>
-        </div>
+        </button>
+      </div>
 
-        {imageSourceType === 'file' ? (
-          <FileInput
-            ref={ref}
-            id="image"
-            label=""
-            type="file"
-            onChange={setImageFile}
-            accept="image/png, image/jpeg"
-            required={imageSourceType === 'file'}
-          />
-        ) : (
-          <Input
-            id="url"
-            label=""
-            type="text"
-            value={url}
-            onChange={setUrl}
-            required={imageSourceType === 'url'}
-          />
-        )}
-      </>
-    );
-  });
+      {props.imageSourceType === 'file' ? (
+        <FileInput
+          ref={ref}
+          id="image"
+          label=""
+          type="file"
+          onChange={props.setImageFile}
+          accept="image/png, image/jpeg"
+          required={props.imageSourceType === 'file'}
+        />
+      ) : (
+        <Input
+          id="url"
+          label=""
+          type="text"
+          value={props.url}
+          onChange={props.setUrl}
+          required={props.imageSourceType === 'url'}
+        />
+      )}
+    </>
+  );
+});
 
 ImageSourceInput.displayName = "ImageSourceInput";
