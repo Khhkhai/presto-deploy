@@ -2,8 +2,8 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/Button';
 import React, { useState, useEffect, useRef } from "react"
 import { Modal } from "../components/Modal";
-import { Input } from "../components/Input";
-import { FileInput, type FileInputHandle } from "../components/FileInput";
+import { Input } from "../components/InputFields/Input";
+import { FileInput, type FileInputHandle } from "../components/InputFields/FileInput";
 import { BACKEND_PORT } from '../../backend.config.json'
 import { Card } from '../components/Card'
 import { useErrorModal } from "../utils/useErrorModal";
