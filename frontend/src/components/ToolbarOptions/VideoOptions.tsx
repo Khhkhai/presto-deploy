@@ -10,7 +10,6 @@ type VideoOptionProps = {
     posX: string; setPosX: (_posX: string) => void;
     posY: string; setPosY: (_posY: string) => void;
     selectedElement: VideoElementType;
-
     videoUrl: string; setVideoUrl: (_url: string) => void;
     autoplay: boolean; setAutoplay: (_autoplay: boolean) => void;
     handleUpdateVideo: () => void;

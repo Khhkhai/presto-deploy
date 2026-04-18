@@ -4,6 +4,7 @@ export type PresentationType = {
     description: string;
     thumbnail: string | null;
     slides: SlideType[];
+    defaultBackground: Background;
 };
 
 export type SlideType = {
@@ -23,6 +24,7 @@ export type BaseElementType = {
 export type TextElementType = BaseElementType & {
     type: 'text';
     text: string;
+    fontFamily: string;
     fontSize: number;
     color: string;
 }
@@ -53,3 +55,28 @@ export type CodeElementType = BaseElementType & {
 
 export type Language = 'javascript' | 'python' | 'c' | 'unknown';
 export type SlideElementType = TextElementType | RectangleElementType | ImageElementType | VideoElementType | CodeElementType; 
+
+export type SolidBackground = {
+  type: "solid";
+  color: string;
+};
+
+export type GradientBackground = {
+  type: "gradient";
+  from: string;
+  to: string;
+};
+
+export type ImageBackground = {
+  type: "image";
+  src: string;
+};
+
+export type BgType = "solid" | "gradient" | "image";
+export type Background = SolidBackground | GradientBackground | ImageBackground;
+
+export type ImageSource = {
+  type: 'file' | 'url';
+  url: string;
+  file: File | null;
+};

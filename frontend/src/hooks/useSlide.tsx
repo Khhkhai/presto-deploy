@@ -9,17 +9,28 @@ type LoadResponse = {
 
 const createId = () => Date.now().toString();
 
-export const useSlides = (id: string, load: () => Promise<LoadResponse>) => {
+export const useSlides = (load: () => Promise<LoadResponse | null>, index: number, id?: string) => {
   const { showError } = useErrorModal();
   const [slides, setSlides] = useState<SlideType[]>([]);
-  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(index);
 
   const isFirst = currentSlideIndex <= 0;
   const isLast = slides.length === 0 || currentSlideIndex >= slides.length - 1;
 
   useEffect(() => {
-    load().then(data => setSlides(data.slides ?? []));
+    if (!id) {
+      showError("Invalid presentation ID");
+      return;
+    }
+    load().then(data => {
+      if (!data) return;
+      setSlides(data.slides ?? []);
+    });
   }, [id]);
+  
+  useEffect(() => {
+    setCurrentSlideIndex(Math.max(0, index - 1));
+  }, [index]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -37,6 +48,10 @@ export const useSlides = (id: string, load: () => Promise<LoadResponse>) => {
   const handleRightArrow = () => setCurrentSlideIndex(prev => Math.min(prev + 1, slides.length - 1));
 
   const handleCreateSlide = async () => {
+    if (!id) {
+      showError("Invalid presentation ID");
+      return null;
+    }
     const newSlide = await createSlide(id, createId());
     setSlides(prev => {
       const updated = [...prev, newSlide];
@@ -46,6 +61,10 @@ export const useSlides = (id: string, load: () => Promise<LoadResponse>) => {
   };
 
   const handleDeleteSlide = async () => {
+    if (!id) {
+      showError("Invalid presentation ID");
+      return null;
+    }
     if (slides.length <= 1) {
       showError("You cannot delete the only slide. Delete the presentation instead.");
       return;
@@ -57,11 +76,15 @@ export const useSlides = (id: string, load: () => Promise<LoadResponse>) => {
     setCurrentSlideIndex(prev => Math.min(prev, updatedSlides.length - 1));
   };
 
+  const goToSlide = (index: number) => {
+    setCurrentSlideIndex(index);
+  };
   return {
     slides, setSlides,
-    currentSlideIndex,
+    currentSlideIndex, setCurrentSlideIndex,
     isFirst, isLast,
     handleLeftArrow, handleRightArrow,
     handleCreateSlide, handleDeleteSlide,
+    goToSlide
   };
 };

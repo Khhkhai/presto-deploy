@@ -10,10 +10,8 @@ type ImageOptionsProps = {
     posX: string; setPosX: (_posX: string) => void;
     posY: string; setPosY: (_posY: string) => void;
     selectedElement: ImageElementType;
-
-    imageSource: ImageSource;
-    setImageSource: (_val: ImageSource) => void;
-    setImageDescription: (_imageDes: string) => void;
+    imageSource: ImageSource; setImageSource: (_val: ImageSource) => void;
+    imageDescription: string; setImageDescription: (_imageDes: string) => void;
     handleUpdateImage: () => void;
 }
 
@@ -29,8 +27,12 @@ export const ImageOptions = (props: ImageOptionsProps) => {
       />
       <div className="flex gap-1 flex-col">
         <span className="text-sm w-12">Description</span>
-        <Input type="text" id={`alt-${props.selectedElement.id}`} label="" defaultValue={props.selectedElement.alt} 
-          onBlur={props.setImageDescription} 
+        <Input 
+          type="text" 
+          id={`alt-${props.selectedElement.id}`} 
+          value={props.imageDescription}
+          onChange={(val) => props.setImageDescription(val)} 
+          label=""
         />
       </div>
 

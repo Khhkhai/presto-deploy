@@ -1,12 +1,11 @@
 import React, { useEffect, useRef } from "react";
+import { Button } from "./Button";
 
 type ModalProps = {
   open: boolean;
   onClose: () => void;
   title: string;
   children: React.ReactNode;
-  showClose?: boolean;
-
 };
 
 export const Modal = (props: ModalProps) => {
@@ -26,14 +25,9 @@ export const Modal = (props: ModalProps) => {
         <div className="modal-box">
           <h3 className="font-bold text-lg">{props.title}</h3>
           <div className="py-4">{props.children}</div>
-          {props.showClose && (
-            <div className="modal-action">
-              <button className="btn" onClick={props.onClose}>Close</button>
-            </div>
-          )}
         </div>
         <form method="dialog" className="modal-backdrop">
-          <button onClick={props.onClose}>close</button>
+          <Button type="button" onClick={props.onClose}>close</Button>
         </form>
       </dialog>
     </>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { createElement, updateSlide } from "../api/store";
 import { detectLanguage } from "../utils/detectLanguage";
+import { useErrorModal } from "../utils/useErrorModal";
 import type { SlideType, SlideElementType } from "../data";
 
 type UpdateSlides = (_updater: (_prev: SlideType[]) => SlideType[]) => void;
@@ -8,16 +9,18 @@ type UpdateSlides = (_updater: (_prev: SlideType[]) => SlideType[]) => void;
 const createId = () => Date.now().toString();
 
 export const useElements = (
-  presentationId: string, 
   slides: SlideType[],
   currentSlideIndex: number,
-  setSlides: UpdateSlides
+  setSlides: UpdateSlides,
+  presentationId?: string, 
 ) => {
+  const { showError } = useErrorModal(); 
   const [height, setHeight] = useState('0');
   const [width, setWidth] = useState('0');
   const [posX, setPosX] = useState('0');
   const [posY, setPosY] = useState('0');
   const [fontSize, setFontSize] = useState('1');
+  const [fontFamily, setFontFamily] = useState('1');
   const [color, setColor] = useState('#000000');
   const [selectedElementId, setSelectedElementId] = useState<string | null>(null);
   const selectedElement: SlideElementType | null = selectedElementId
@@ -27,13 +30,16 @@ export const useElements = (
   const getCurrentSlide = () => slides[currentSlideIndex];
 
   const applyUpdate = async ( updated: SlideElementType, slide: SlideType) => {
+    if (!presentationId) {
+      showError("Invalid presentation ID");
+      return null;
+    }
     const updatedSlide: SlideType = {
       ...slide,
       elements: slide.elements.map(e =>
         e.id === updated.id ? updated : e
       )
     };
-
     setSlides(prev =>
       prev.map(s => (s.id === slide.id ? updatedSlide : s))
     );
@@ -48,14 +54,20 @@ export const useElements = (
     setHeight(el.height.toString());
     setPosX(el.x.toString());
     setPosY(el.y.toString());
-    
     if (el.type === 'text') {
       setFontSize(el.fontSize.toString());
       setColor(el.color);
     }
+    if (el.type === 'code') {
+      setFontSize(el.fontSize.toString());
+    }
   };
 
   const createElementBase = async ( element: SlideElementType) => {
+    if (!presentationId) {
+      showError("Invalid presentation ID");
+      return null;
+    }
     const slide = getCurrentSlide();
     if (!slide) return;
 
@@ -88,6 +100,7 @@ export const useElements = (
       width: 10,
       height: 10,
       text: "Add text",
+      fontFamily: 'Arial',
       fontSize: 1,
       color: "black",
     });
@@ -133,7 +146,7 @@ export const useElements = (
   const updateElement = async () => {
     const slide = getCurrentSlide();
     if (!slide || !selectedElement) return;
-
+    console.log("updating element", selectedElement.id, { width, height, posX, posY, fontSize, fontFamily, color });
     const base = {
       width: Number(width),
       height: Number(height),
@@ -147,7 +160,7 @@ export const useElements = (
       updated = { ...selectedElement, ...base};
       break;
     case "text":
-      updated = { ...selectedElement, ...base, fontSize: Number(fontSize), color};
+      updated = { ...selectedElement, ...base, fontFamily: fontFamily, fontSize: Number(fontSize), color};
       break;
     case "image":
       updated = { ...selectedElement, ...base};
@@ -200,6 +213,10 @@ export const useElements = (
   };
   
   const deleteElement = async (elId: string) => {
+    if (!presentationId) {
+      showError("Invalid presentation ID");
+      return null;
+    }
     const slide = slides[currentSlideIndex];
     if (!slide) return;
     
@@ -213,6 +230,10 @@ export const useElements = (
   };
 
   const moveUpDown = async (direction: 'up' | 'down') => {
+    if (!presentationId) {
+      showError("Invalid presentation ID");
+      return null;
+    }
     const slide = getCurrentSlide();
     if (!slide || !selectedElement) return;
 
@@ -233,6 +254,7 @@ export const useElements = (
     posX, setPosX,
     posY, setPosY,
     fontSize, setFontSize,
+    fontFamily, setFontFamily,
     color, setColor,
     selectedElement,
     handleSelectElement,

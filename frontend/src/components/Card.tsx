@@ -1,4 +1,4 @@
-import type { Slide } from "../data";
+import type { SlideType } from "../data";
 
 type CardProps = {
     key: string
@@ -6,7 +6,7 @@ type CardProps = {
     name: string;
     thumbnail: string | null;
     description: string;
-    slides: Slide[];
+    slides: SlideType[];
     onClick: () => void;
 }
 
