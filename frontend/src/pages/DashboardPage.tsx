@@ -9,10 +9,10 @@ import { Card } from '../components/Card'
 import { useErrorModal } from "../utils/useErrorModal";
 import { getStore, createPresentation } from "../api/store"
 import { fileToDataUrl } from "../utils/file"
-import type { Presentation } from "../data"
+import type { PresentationType, SolidBackground } from "../data"
 import axios from 'axios';
 
-type StorePresentation = Omit<Presentation, "id">;
+type StorePresentation = Omit<PresentationType, "id">;
 
 export const DashboardPage = () => {
   const navigate = useNavigate();
@@ -22,16 +22,15 @@ export const DashboardPage = () => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [thumbnail, setThumbnail] = useState<File | null>(null);
-  const [presentations, setPresentations] = useState<Presentation[]>([]);
-
-  const createId = () => Date.now().toString();
+  const [presentations, setPresentations] = useState<PresentationType[]>([]);
   const fileInputRef = useRef<FileInputHandle>(null);
+  const createId = () => Date.now().toString();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data: Record<string, StorePresentation> = await getStore();
-        const arr: Presentation[] = Object.entries(data || {}).map(
+        const arr: PresentationType[] = Object.entries(data || {}).map(
           ([id, value]) => ({
             id,
             ...value,
@@ -97,7 +96,11 @@ export const DashboardPage = () => {
             id: createId(),
             elements: [],
           }
-        ]
+        ],
+        defaultBackground: {
+          type: "solid",
+          color: "white"
+        } as SolidBackground
       };
       await createPresentation(newPresentation);
       setPresentations(prev => [...prev, newPresentation]);
@@ -112,21 +115,15 @@ export const DashboardPage = () => {
     }
   }
 
-
   return (  
     <>
       <nav className="navbar bg-base-100 shadow-sm">
         <div className="navbar-start">
           <div onClick={() =>  navigate('/dashboard')} className='text-xl cursor-pointer'>Presto</div>
         </div>
-        <div className="navbar-end">
+        <div className="navbar-end gap-2">
           <Button onClick={() => setCreateModalOpen(true)}>New presentation</Button>
           <Button onClick={logout}>logout</Button>
-          <button className="btn btn-ghost btn-circle">
-            <div className="indicator">
-                profile
-            </div>
-          </button>
         </div>
       </nav>
       <div>
@@ -145,17 +142,20 @@ export const DashboardPage = () => {
         </div>
       </div>
       
-      <Modal open={createModalOpen} onClose={() => {
-        setCreateModalOpen(false);
-        resetForm();
-      }} title="Create a new presentation" showClose={true}>
-        <form onSubmit={handleCreate} 
-          className="fieldset w-xs p-4"
-        >
+      <Modal open={createModalOpen} title="Create a new presentation" 
+        onClose={() => {
+          setCreateModalOpen(false);
+          resetForm();
+        }} 
+      >
+        <form onSubmit={handleCreate} className="fieldset w-xs p-4">
           <Input id="name" label="Name" type="text" value={name} onChange={setName} required={true}/> 
           <Input id="description" label="Description" type="text" value={description} onChange={setDescription} required={true}/> 
           <FileInput ref={fileInputRef} id="thumbnail" label="Thumbnail" type="file" onChange={setThumbnail} accept="image/png, image/jpeg"/>
-          <Button type="submit">Create</Button>       
+          <div className="flex justify-end gap-2">
+            <Button onClick={() => { setCreateModalOpen(false); resetForm(); }}>Cancel</Button>
+            <Button type="submit">Create</Button> 
+          </div>    
         </form>
       </Modal>
     </>

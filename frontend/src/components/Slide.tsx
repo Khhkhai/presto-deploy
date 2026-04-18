@@ -1,34 +1,25 @@
-import { Stage, Layer, Text, Rect } from 'react-konva';
-import { useRef, useState, useEffect } from 'react';
-import { ImageElement } from './Elements/ImageElement';
-import { VideoElement } from './Elements/VideoElement';
-import { CodeElement } from './Elements/CodeElement';
-import type Konva from 'konva';
-import type { 
-  SlideType, 
-  SlideElementType, 
-  RectangleElementType,
-  TextElementType, 
-  ImageElementType, 
-  VideoElementType, 
-  CodeElementType 
+import React,{ useRef, useState, useEffect } from "react";
+import { Rnd } from "react-rnd";
+import SyntaxHighlighter from "react-syntax-highlighter";
+import { atomOneDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import type {
+  SlideType,
+  SlideElementType,
+  TextElementType,
+  Background,
 } from "../data";
 
 type SlideProps = {
-    slide?: SlideType | null;
-    onDblClick?: (_el: SlideElementType | null) => void;
-    onContextMenu?: (_id: string, _x: number, _y: number) => void;
-    onTextChange?: (_id: string, _text: string) => void;
-}
-
-export type Frame = {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
+  slide?: SlideType | null;
+  background?: Background;
+  disabled?: boolean;
+  onDblClick?: (_el: SlideElementType | null) => void;
+  onContextMenu?: (_id: string, _x: number, _y: number) => void;
+  onTextChange?: (_id: string, _text: string) => void;
+  updateElementPartial?: (_id: string, _updates: Partial<SlideElementType>) => void;
 };
 
-export const Slide = ((props: SlideProps)  => {
+export const Slide = (props: SlideProps) => {
   const elements = props.slide?.elements ?? [];
   const containerRef = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ width: 0, height: 0 });
@@ -45,141 +36,133 @@ export const Slide = ((props: SlideProps)  => {
     return () => observer.disconnect();
   }, []);
 
-  const toPixels = (el: SlideElementType): Frame => {
-    const w = el.width / 100 * size.width;
-    const h = el.height / 100 * size.height;
-    const x = Math.min(el.x / 100 * size.width, size.width - w);
-    const y = Math.min(el.y / 100 * size.height, size.height - h);
-    return { x, y, width: w, height: h };
+  const toPixels = (el: SlideElementType) => {
+    const width = (el.width / 100) * size.width;
+    const height = (el.height / 100) * size.height;
+    let x = (el.x / 100) * size.width - width / 2;
+    let y = (el.y / 100) * size.height - height / 2;
+
+    x = Math.max(0, Math.min(x, size.width - width));
+    y = Math.max(0, Math.min(y, size.height - height));
+
+    return { width, height, x, y };
   };
-    
-  const handleTextEdit = (el: TextElementType, textNode: Konva.Text) => {
-    const stage = textNode.getStage();
-    const stageBox = stage?.container().getBoundingClientRect();
-    const box = textNode.getClientRect();
 
-    const textarea = document.createElement('textarea');
-    document.body.appendChild(textarea);
-
-    textarea.value = el.text;
-    textarea.style.position = 'fixed';
-    textarea.style.top = (stageBox!.top + box.y) + 'px';
-    textarea.style.left = (stageBox!.left + box.x) + 'px';
-    textarea.style.width = box.width + 'px';
-    textarea.style.height = box.height + 'px';
-    textarea.style.fontSize = el.fontSize + 'em';
-    textarea.style.border = '2px solid #333';
-    textarea.style.padding = '0';
-    textarea.style.resize = 'none';
-    textarea.style.outline = 'none';
-    textarea.style.color = el.color;
-    textarea.style.background = 'transparent';
-
-    textNode.hide();
-    textarea.focus();
-
-    textarea.addEventListener('blur', () => {
-      textNode.show();
-      props.onTextChange?.(el.id, textarea.value);
-      textarea.remove();
-    });
-  };
-  const renderElement = (el: SlideElementType) => {
-    const frame = toPixels(el);
-
+  const renderContent = (el: SlideElementType) => {
     switch (el.type) {
-    case 'rectangle':
+    // currently only a rectangle element is available with orange color
+    case "rectangle":
+      return <div className="w-full h-full bg-orange-400" />;
+
+    case "text":
       return (
-        <Rect
-          key={el.id}
-          {...frame}
-          fill={(el as RectangleElementType).fill}
-          onDblClick={(e) => {
-            e.evt.preventDefault();
-            props.onDblClick?.(el);
+        <div
+          contentEditable
+          suppressContentEditableWarning
+          onBlur={(e) =>
+            props.onTextChange?.(el.id, e.currentTarget.innerText)
+          }
+          style={{
+            fontSize: `${(el as TextElementType).fontSize}em`,
+            color: (el as TextElementType).color,
+            fontFamily: (el as TextElementType).fontFamily || "Arial",
           }}
-          onContextMenu={(e) => {
-            e.evt.preventDefault();
-            props.onContextMenu?.(el.id, e.evt.clientX, e.evt.clientY);
-          }}
+          className="w-full h-full outline-none overflow-auto"
+        >
+          {(el as TextElementType).text}
+        </div>
+      );
+
+    case "image":
+      return (
+        <img
+          src={el.src}
+          alt={el.alt}
+          className="w-full h-full object-contain"
         />
       );
 
-    case 'text':
+    case "video":
       return (
-        <Text
-          key={el.id}
-          text={el.text}
-          {...frame}
-          fill={el.color}
-          fontSize={el.fontSize * 16}
-          onDblClick={(e) => {
-            e.evt.preventDefault();
-            props.onDblClick?.(el);
-            handleTextEdit(el, e.target as Konva.Text);
-          }}
-          onContextMenu={(e) => {
-            e.evt.preventDefault();
-            props.onContextMenu?.(el.id, e.evt.clientX, e.evt.clientY);
-          }}
-        />
+        <div className="w-full h-full bg-gray-200">
+          <iframe
+            src={el.src}
+            className="w-[90%] h-[90%] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+            allow="autoplay"
+          />
+        </div>
       );
 
-    case 'image':
+    case "code":
       return (
-        <ImageElement
-          key={el.id}
-          el={el as ImageElementType}
-          frame={frame}
-          onDblClick={props.onDblClick}
-          onContextMenu={props.onContextMenu}
-        />
-      );
-
-    case 'video':
-      return (
-        <VideoElement
-          key={el.id}
-          el={el as VideoElementType}
-          frame={frame}
-          containerSize={size}
-          onDblClick={props.onDblClick}
-          onContextMenu={props.onContextMenu}
-        />
-      );
-
-    case 'code':
-      return (
-        <CodeElement
-          key={el.id}
-          el={el as CodeElementType}
-          frame={frame}
-          onDblClick={props.onDblClick}
-          onContextMenu={props.onContextMenu}
-        />
+        <div className="w-full h-full overflow-auto text-sm p-2">
+          <SyntaxHighlighter
+            language={el.language }
+            style={atomOneDark}
+            customStyle={{
+              margin: 0,
+              height: "100%",
+              width: "100%",
+              fontSize: `${el.fontSize * 12}px`,
+              whiteSpace: "pre",
+              overflow: "auto",
+            }}
+          >
+            {el.code}
+          </SyntaxHighlighter>
+        </div>
       );
 
     default:
       return null;
     }
   };
+  const getBackgroundStyle = (bg: Background | undefined): React.CSSProperties => {
+    if (!bg) {
+      return { background: "white" };
+    }
+    switch (bg.type) {
+    case "solid":
+      return { background: bg.color };
 
-  const canvasElements = elements.filter(
-    el => el.type === 'rectangle' || el.type === 'text' || el.type === 'image'
-  );
+    case "gradient":
+      return {
+        background: `linear-gradient(${bg.from}, ${bg.to})`
+      };
 
-  const overlayElements = elements.filter(
-    el => el.type === 'video' || el.type === 'code'
-  );
+    case "image":
+      return {
+        backgroundImage: `url(${bg.src})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      };
+
+    default:
+      return { background: "white" };
+    }
+  };
 
   return (
-    <div ref={containerRef} className="relative w-full h-full bg-white">
-      <Stage className="absolute top-0 left-0 z-0" width={size.width} height={size.height}>
-        <Layer>
-          {canvasElements.map(renderElement)}
-        </Layer>
-      </Stage>
-      {overlayElements.map(renderElement)}
+    <div ref={containerRef} className="relative w-full h-full bg-white" style={getBackgroundStyle(props.background)}>
+      {elements.map((el) => {
+        const frame = toPixels(el);
+        return (
+          <Rnd
+            key={el.id}
+            size={{ width: frame.width, height: frame.height }}
+            position={{ x: frame.x, y: frame.y }}
+            bounds="parent"
+            onDoubleClick={() => props.onDblClick?.(el)}
+            onContextMenu={(e: React.MouseEvent<HTMLDivElement>) => {
+              e.preventDefault();
+              props.onContextMenu?.(el.id, e.clientX, e.clientY)
+            }}
+            className="border border-transparent hover:border-gray-400"
+          >
+            {renderContent(el)}
+          </Rnd>
+        );
+      })}
     </div>
   );
-})
+};
