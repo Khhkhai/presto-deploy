@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
 import { Modal } from "../components/Modal";
 import { Input } from "../components/InputFields/Input";
@@ -10,26 +10,26 @@ import { useSlides } from "../hooks/useSlide";
 import { useElements } from "../hooks/useElement";
 import { ContextMenu } from "../components/ContextMenu";
 import { Toolbar } from "../components/Toolbar";
-import { useErrorModal } from "../utils/useErrorModal";
 
 export const PresentationPage = () => {
-  const params = useParams();
+  const { id, slideIndex } = useParams();
   const navigate = useNavigate();
-  const { showError } = useErrorModal();
 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [titleModalOpen, setTitleModalOpen] = useState(false);
   const [thumbnailModalOpen, setThumbnailModalOpen] = useState(false);
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number; elementId: string } | null>(null);
   const fileInputRef = useRef<FileInputHandle>(null);
+  const [viewSlideModalOpen, setViewSlideModalOpen] = useState(false);
 
-  const id = params.id ?? "";
+  const index = Number(slideIndex ?? 0);
 
   const {
     presentation, load,
     name, setName,
     setThumbnail,
     handleDelete, handleTitle, handleThumbnail,
+    setDefaultBackground
   } = usePresentation(id);
 
   const {
@@ -38,19 +38,21 @@ export const PresentationPage = () => {
     isFirst, isLast,
     handleLeftArrow, handleRightArrow,
     handleCreateSlide, handleDeleteSlide,
-  } = useSlides(id, load);
+    goToSlide
+  } = useSlides(load, index, id);
 
-  const element = useElements(id, slides, currentSlideIndex, setSlides);
+  const element = useElements(slides, currentSlideIndex, setSlides, id);
   const {
     handleSelectElement,
     updateTextElement,
     deleteElement,
   } = element
 
-  if (!params.id) {
-    showError("Unexpected error");
-    return <div>Invalid presentation</div>;
-  }
+  useEffect(() => {
+    navigate(`/presentation/${id}/slide/${currentSlideIndex + 1}`, { replace: true });
+  }, [currentSlideIndex]);
+
+  if (!id) return;
 
   return (
     <>
@@ -69,12 +71,16 @@ export const PresentationPage = () => {
             </div>
           </div>
           <div className="flex gap-2">
+            <Button onClick={() => setViewSlideModalOpen(true)}>Preview</Button>
+
+            <Button onClick={() => setViewSlideModalOpen(true)}>View Slides</Button>
+
             <Button onClick={() => setDeleteModalOpen(true)}>Delete</Button>
           </div>
         </div>
 
         <div className="flex flex-1 overflow-hidden p-3 gap-3">
-          <Toolbar elements={element}/>
+          <Toolbar elements={element} setDefaultBackground={setDefaultBackground}/>
 
           <div className='flex-[3] flex flex-col overflow-hidden p-4 gap-2'>
             <div className='flex-1 flex items-center justify-center min-h-0 px-4'>
@@ -83,6 +89,7 @@ export const PresentationPage = () => {
 
                   <Slide
                     slide={slides[currentSlideIndex]}
+                    background={presentation?.defaultBackground}
                     onDblClick={(el) => {handleSelectElement(el);}}
                     onContextMenu={(elId, x, y) => setContextMenu({ x, y, elementId: elId })}
                     onTextChange={(elId, text) => updateTextElement(elId, text)}
@@ -154,6 +161,36 @@ export const PresentationPage = () => {
         <div className="flex justify-end gap-2 mt-4">
           <Button onClick={() => setThumbnailModalOpen(false)}>Cancel</Button>
           <Button onClick={() => handleThumbnail(() => setThumbnailModalOpen(false), fileInputRef)}>Confirm</Button>
+        </div>
+      </Modal>
+
+      <Modal open={viewSlideModalOpen} onClose={() => setViewSlideModalOpen(false)} title="View Slides">
+        <div className="grid grid-cols-3 gap-3 max-h-[70vh] overflow-y-auto mt-4">
+          {slides.map((slide, i) => (
+            <div
+              key={slide.id}
+              className="cursor-pointer border p-2 rounded hover:bg-base-200"
+              onClick={() => {goToSlide(i); setViewSlideModalOpen(false);}}
+            >
+              <div className="w-full aspect-video overflow-hidden rounded relative">
+                <div
+                  style={{
+                    transform: "scale(0.2)",
+                    transformOrigin: "top left",
+                    width: "500%",
+                    height: "500%",
+                    pointerEvents: "none",
+                  }}
+                >
+                  <Slide slide={slide} background={presentation?.defaultBackground} />
+                </div>
+              </div>
+              <p className="text-xs text-center mt-1">Slide {i + 1}</p>
+            </div>
+          ))}
+        </div>
+        <div className="flex justify-end gap-2 mt-4">
+          <Button onClick={() => setViewSlideModalOpen(false)}>Cancel</Button>
         </div>
       </Modal>
     </>
