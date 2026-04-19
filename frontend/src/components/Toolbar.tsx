@@ -84,6 +84,7 @@ export const Toolbar = ({elements, setDefaultBackground}: ToolbarProps) => {
     setCodeFontSize('');
   };
 
+
   const getImageSrc = async (imageSource: ImageSource): Promise<string> => {
     if (imageSource.type === "file" && imageSource.file) {
       return await fileToDataUrl(imageSource.file) as string;
@@ -124,6 +125,83 @@ export const Toolbar = ({elements, setDefaultBackground}: ToolbarProps) => {
     setCreateCodeModalOpen(false);
     resetCodeForm();
   };
+
+  const renderTypeOptions = () => {
+    const el = elements.selectedElement;
+    if (!el) return null;
+
+    switch (el.type) {
+    case 'rectangle':
+      return (
+        <ShapeOptions 
+          key={el.id}
+          {...commonProps} 
+          selectedElement={el} 
+        />
+      );
+
+    case 'text':
+      return (
+        <TextOptions
+          key={el.id}
+          {...commonProps}
+          selectedElement={el}
+          fontSize={elements.fontSize}
+          setFontSize={elements.setFontSize}
+          fontFamily={elements.fontFamily}
+          setFontFamily={elements.setFontFamily}
+          color={elements.color}
+          setColor={elements.setColor}
+        />
+      );
+
+    case 'image':
+      return (
+        <ImageOptions
+          key={el.id}
+          {...commonProps}
+          selectedElement={el}
+          imageSource={imageSource}
+          setImageSource={setImageSource}
+          imageDescription={imageDescription}
+          setImageDescription={setImageDescription}
+          handleUpdateImage={handleUpdateImage}
+        />
+      );
+
+    case 'video':
+      return (
+        <VideoOptions
+          key={el.id}
+          {...commonProps}
+          selectedElement={el as VideoElementType}
+          videoUrl={videoUrl}
+          setVideoUrl={setVideoUrl}
+          autoplay={autoplay}
+          setAutoplay={setAutoplay}
+          handleUpdateVideo={() => elements.updateVideo(videoUrl, autoplay)}
+        />
+      );
+
+    case 'code':
+      return (
+        <CodeOptions
+          key={el.id}
+          {...commonProps}
+          selectedElement={el as CodeElementType}
+          code={code}
+          setCode={setCode}
+          fontSize={codeFontSize}
+          setFontSize={setCodeFontSize}
+          handleUpdateCode={() => elements.updateCode(code, codeFontSize)}
+        />
+      );
+
+    default:
+      return null;
+    }
+  }
+
   return (
     <div className="flex flex-col border w-65 gap-3 rounded-lg p-3 bg-base-200 overflow-auto">
       <Button onClick={() => setCreateThemeModalOpen(true)} className="w-full aspect-square rounded-lg">Theme</Button>
@@ -135,6 +213,18 @@ export const Toolbar = ({elements, setDefaultBackground}: ToolbarProps) => {
         <Button onClick={() => setCreateVideoModalOpen(true)} className="w-full aspect-square rounded-lg">Video</Button>
         <Button onClick={() => setCreateCodeModalOpen(true)} className="w-full aspect-square rounded-lg">Code</Button>
       </div>
+
+      {elements.selectedElement && (
+        <div className="flex flex-col gap-2">
+          {renderTypeOptions()}
+          <Button onClick={() => { elements.updateElement(); } }>Save</Button>
+          <div className="flex items-center gap-2">
+            <span className="text-sm w-12">Layer</span>
+            <Button onClick={() => elements.moveUpDown('up')}>^</Button>
+            <Button onClick={() => elements.moveUpDown('down')}>v</Button>
+          </div>
+        </div>
+      )}
 
       <Modal open={createImageModalOpen} onClose={() => { setCreateImageModalOpen(false); resetImageForm(); }} title="Add Image">
         <form onSubmit={handleCreateImage} className="flex flex-col gap-4">

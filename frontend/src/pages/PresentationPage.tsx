@@ -49,7 +49,7 @@ export const PresentationPage = () => {
   } = element
 
   useEffect(() => {
-    navigate(`/presentation/${id}/slide/${currentSlideIndex + 1}`, { replace: true });
+    navigate(`/presentation/${id}/slide/${currentSlideIndex + 1}`);
   }, [currentSlideIndex]);
 
   if (!id) return;
@@ -71,7 +71,7 @@ export const PresentationPage = () => {
             </div>
           </div>
           <div className="flex gap-2">
-            <Button onClick={() => setViewSlideModalOpen(true)}>Preview</Button>
+            <Button onClick={() => window.open(`/preview/${id}/slide/${currentSlideIndex + 1}`, '_blank')}>Preview</Button>
 
             <Button onClick={() => setViewSlideModalOpen(true)}>View Slides</Button>
 
@@ -93,6 +93,7 @@ export const PresentationPage = () => {
                     onDblClick={(el) => {handleSelectElement(el);}}
                     onContextMenu={(elId, x, y) => setContextMenu({ x, y, elementId: elId })}
                     onTextChange={(elId, text) => updateTextElement(elId, text)}
+                    disabled={true}
                   />
                   {contextMenu && (
                     <ContextMenu

@@ -5,6 +5,7 @@ import { DashboardPage } from './pages/DashboardPage';
 import { StarterPage } from './pages/StarterPage';
 import { PresentationPage } from './pages/PresentationPage';
 import { Slide } from './components/Slide';
+import { PreviewPage } from "./pages/PreViewPage";
 
 function App() {
   const navigate = useNavigate();
@@ -22,8 +23,10 @@ function App() {
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/presentation/:id" element={<PresentationPage />}>
           <Route index element={<Navigate to="slide/0" replace />} />
-          <Route path="slide/:slideIndex" element={<Slide  />} />
+          <Route path="slide/:slideIndex" element={<Slide />} />
         </Route>
+        <Route path="/preview/:id/slide/:slideIndex" element={<PreviewPage />} />
+
       </Routes>
     </>
   )

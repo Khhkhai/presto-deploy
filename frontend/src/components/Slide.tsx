@@ -157,6 +157,8 @@ export const Slide = (props: SlideProps) => {
               e.preventDefault();
               props.onContextMenu?.(el.id, e.clientX, e.clientY)
             }}
+            disableDragging={props.disabled}
+            enableResizing={!props.disabled}
             className="border border-transparent hover:border-gray-400"
           >
             {renderContent(el)}

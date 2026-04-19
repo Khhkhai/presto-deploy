@@ -27,7 +27,7 @@ export const useSlides = (load: () => Promise<LoadResponse | null>, index: numbe
       setSlides(data.slides ?? []);
     });
   }, [id]);
-  
+
   useEffect(() => {
     setCurrentSlideIndex(Math.max(0, index - 1));
   }, [index]);
