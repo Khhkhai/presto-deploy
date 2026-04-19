@@ -5,7 +5,7 @@ import { DashboardPage } from './pages/DashboardPage';
 import { StarterPage } from './pages/StarterPage';
 import { PresentationPage } from './pages/PresentationPage';
 import { Slide } from './components/Slide';
-import { PreviewPage } from "./pages/PreViewPage";
+import { PreviewPage } from './pages/PreviewPage';
 
 function App() {
   const navigate = useNavigate();
