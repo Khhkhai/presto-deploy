@@ -1,7 +1,6 @@
 import bodyParser from "body-parser";
 import cors from "cors";
 import express from "express";
-import fs from "fs";
 import swaggerUi from "swagger-ui-express";
 import swaggerDocument from "../swagger.json" with { type: "json" };
 import { AccessError, InputError } from "./error.js";
@@ -13,9 +12,10 @@ import {
   register,
   save,
   setStore,
+  initialize
 } from "./service.js";
-const { PROD_BACKEND_PORT, USE_VERCEL_KV } = process.env;
 
+await initialize();
 const app = express();
 
 app.use(cors());
