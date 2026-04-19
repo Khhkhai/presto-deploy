@@ -107,12 +107,10 @@ app.get("/", (req, res) => res.redirect("/docs"));
 
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-const port = USE_VERCEL_KV
-  ? PROD_BACKEND_PORT
-  : JSON.parse(fs.readFileSync("../frontend/backend.config.json")).BACKEND_PORT;
+const port = process.env.PROD_BACKEND_PORT || 3000;
 
-let server;
-if (port) {
+let server = null;
+if (process.env.NODE_ENV !== "production") {
   server = app.listen(port, () => {
     console.log(`For API docs, navigate to http://localhost:${port}`);
   });
