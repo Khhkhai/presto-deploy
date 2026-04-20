@@ -122,8 +122,8 @@ export const DashboardPage = () => {
           <div onClick={() =>  navigate('/dashboard')} className='text-xl cursor-pointer'>Presto</div>
         </div>
         <div className="navbar-end gap-2">
-          <Button onClick={() => setCreateModalOpen(true)}>New presentation</Button>
-          <Button onClick={logout}>logout</Button>
+          <Button name="new-presentation" onClick={() => setCreateModalOpen(true)}>New presentation</Button>
+          <Button name="logout" onClick={logout}>logout</Button>
         </div>
       </nav>
       <div>
@@ -149,12 +149,12 @@ export const DashboardPage = () => {
         }} 
       >
         <form onSubmit={handleCreate} className="fieldset w-xs p-4">
-          <Input id="name" label="Name" type="text" value={name} onChange={setName} required={true}/> 
-          <Input id="description" label="Description" type="text" value={description} onChange={setDescription} required={true}/> 
-          <FileInput ref={fileInputRef} id="thumbnail" label="Thumbnail" type="file" onChange={setThumbnail} accept="image/png, image/jpeg"/>
+          <Input name='name' id="name" label="Name" type="text" value={name} onChange={setName} required={true}/> 
+          <Input name='description' id="description" label="Description" type="text" value={description} onChange={setDescription} required={true}/> 
+          <FileInput name='thumbnail' ref={fileInputRef} id="thumbnail" label="Thumbnail" type="file" onChange={setThumbnail} accept="image/png, image/jpeg"/>
           <div className="flex justify-end gap-2">
-            <Button onClick={() => { setCreateModalOpen(false); resetForm(); }}>Cancel</Button>
-            <Button type="submit">Create</Button> 
+            <Button name="cancel" onClick={() => { setCreateModalOpen(false); resetForm(); }}>Cancel</Button>
+            <Button name="create" type="submit">Create</Button> 
           </div>    
         </form>
       </Modal>

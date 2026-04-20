@@ -8,8 +8,8 @@ export const StarterPage = () => {
   return (
     <>
       <div className="text-7xl mb-9 font-bold">Welcome to Presto!</div>
-      <Button onClick={() =>  navigate('/login')}>Login</Button>
-      <Button onClick={() =>  navigate('/register')}>Register</Button>
+      <Button name="login" onClick={() =>  navigate('/login')}>Login</Button>
+      <Button name="register" onClick={() =>  navigate('/register')}>Register</Button>
     </>
   );
 };

@@ -41,9 +41,9 @@ export const LoginPage = ({successCallBack} : LoginPageProps) => {
         onSubmit={handleSubmit} 
         className="fieldset bg-base-200 rounded-box w-xs border p-4"
       >   
-        <Input id="email" label="Email" type="email" value={email} onChange={setEmail} required={true}/> 
-        <Input id="password" label="Password" type="password" value={password} onChange={setPassword} required={true}/> 
-        <Button type="submit">login</Button>
+        <Input name="email" id="email" label="Email" type="email" value={email} onChange={setEmail} required={true}/> 
+        <Input name="password" id="password" label="Password" type="password" value={password} onChange={setPassword} required={true}/> 
+        <Button name="login-submit" type="submit">login</Button>
         <p className="text-center text-sm">
             No account yet? <Link to='/register' className="link link-primary">Register</Link>
         </p>

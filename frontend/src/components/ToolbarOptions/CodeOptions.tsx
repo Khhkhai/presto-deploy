@@ -29,6 +29,7 @@ export const CodeOptions = (props: CodeOptionProps) => {
         <span className="text-sm w-12">FontSize</span>
         <Input 
           type="number" 
+          name="fontSize"
           id={`fontSize-${props.selectedElement.id}`} 
           defaultValue={props.selectedElement.fontSize} 
           min={0} max={100}
@@ -44,9 +45,10 @@ export const CodeOptions = (props: CodeOptionProps) => {
           value={props.code}
           onChange={(e) => props.setCode(e.target.value)}
           style={{ whiteSpace: 'pre', fontFamily: 'monospace' }}
+          name="code"
         />
       </div>
-      <Button onClick={props.handleUpdateCode} className="btn-xs">Update Code</Button>
+      <Button name="update-code" onClick={props.handleUpdateCode} className="btn-xs">Update Code</Button>
     </div>
   );
 };

@@ -34,6 +34,7 @@ export const TextOptions = (props: TextOptionsProps) => {
       <div className="flex items-center gap-3">
         <span className="text-sm w-12">FontSize</span>
         <Input 
+          name="fontSize"
           type="number" id={`fontSize-${props.selectedElement.id}`} 
           defaultValue={props.selectedElement.fontSize} 
           min={0} max={100}
@@ -44,6 +45,7 @@ export const TextOptions = (props: TextOptionsProps) => {
       <div className="flex items-center gap-3">
         <span className="text-sm w-12">Color</span>
         <Input 
+          name="color"
           type="color" id={`color-${props.selectedElement.id}`} 
           value={props.selectedElement.color || "#000000"}
           onChange={props.setColor}

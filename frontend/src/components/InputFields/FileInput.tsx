@@ -5,6 +5,7 @@ export type FileInputHandle = {
 };
 
 type FileInputProps = {
+  name: string;
   label: string;
   onChange: (_file: File | null) => void;
   type: "file";
@@ -35,6 +36,7 @@ export const FileInput = React.forwardRef<FileInputHandle, FileInputProps>(
           <span className="label-text text-black">{props.label}</span>
         </label>
         <input
+          name={props.name}
           ref={inputRef}
           id={props.id}
           type={props.type}

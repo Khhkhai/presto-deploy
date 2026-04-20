@@ -21,7 +21,7 @@ export const ContextMenu = ({ x, y, onDelete, onClose }: ContextMenuProps) => {
     >
       <ul className="menu bg-base-200 rounded-box w-32 shadow">
         <li>
-          <a className="text-error" onClick={onDelete}>Delete</a>
+          <a id="context-menu-delete" className="text-error" onClick={onDelete}>Delete</a>
         </li>
       </ul>
     </div>

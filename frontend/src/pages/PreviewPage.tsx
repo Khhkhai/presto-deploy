@@ -21,7 +21,7 @@ export const PreviewPage = () => {
 
   useEffect(() => {
     if (!id) return;
-        navigate(`/preview/${id}/slide/${currentSlideIndex + 1}`, { replace: true });
+    navigate(`/preview/${id}/slide/${currentSlideIndex + 1}`, { replace: true });
   }, [currentSlideIndex]);
 
   const currentSlide = slides[currentSlideIndex];
@@ -38,14 +38,14 @@ export const PreviewPage = () => {
             Slide {currentSlideIndex + 1} of {slides.length}
         </p>   
         <div className='flex flex-1 justify-end'>
-            <Button onClick={handleLeftArrow} disabled={isFirst}>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" /></svg>
-            </Button>
-            <Button onClick={handleRightArrow} disabled={isLast}>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6"><path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" /></svg>
-            </Button>
+          <Button name="previous-slide" onClick={handleLeftArrow} disabled={isFirst}>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" /></svg>
+          </Button>
+          <Button name="next-slide" onClick={handleRightArrow} disabled={isLast}>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6"><path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" /></svg>
+          </Button>
         </div>
-    </div>
+      </div>
     </div>
   );
 };

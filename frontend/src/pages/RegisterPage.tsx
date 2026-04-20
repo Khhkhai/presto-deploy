@@ -46,14 +46,14 @@ export const RegisterPage = ({successCallBack} : RegisterPageProps) => {
         onSubmit={handleSubmit} 
         className="fieldset bg-base-200 rounded-box w-xs border p-4"
       >   
-        <Input id="name" label="Name" type="text" value={name} onChange={setName} required={true}/> 
-        <Input id="email" label="Email" type="email" value={email} onChange={setEmail} required={true}/> 
-        <Input id="password" label="Password" type="password" value={password} onChange={setPassword} required={true}/>
-        <Input id="confirm-password" label="Confirm Password" type="password" value={confirmPassword} onChange={setConfirmPassword} required={true}/> 
+        <Input name="name" id="name" label="Name" type="text" value={name} onChange={setName} required={true}/> 
+        <Input name="email" id="email" label="Email" type="email" value={email} onChange={setEmail} required={true}/> 
+        <Input name="password" id="password" label="Password" type="password" value={password} onChange={setPassword} required={true}/>
+        <Input name="confirm-password" id="confirm-password" label="Confirm Password" type="password" value={confirmPassword} onChange={setConfirmPassword} required={true}/> 
         {!passwordsMatch && (
           <p className="text-red-500 text-xs">Passwords do not match</p>
         )}
-        <Button type="submit" disabled={!passwordsMatch}>Register</Button>
+        <Button name="register" type="submit" disabled={!passwordsMatch}>Register</Button>
         <p className="text-center text-sm">
             Already have an account? 
           <Link to='/login' className="link link-primary">Login</Link>

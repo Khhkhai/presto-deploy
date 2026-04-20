@@ -86,8 +86,8 @@ export const ThemeModal = (props: ThemeModalProps) => {
         )}
 
         <div className="flex justify-end gap-2">
-          <Button type="button" onClick={props.onClose}>Cancel</Button>
-          <Button type="submit">Create</Button>
+          <Button name="cancel" type="button" onClick={props.onClose}>Cancel</Button>
+          <Button name="create" type="submit">Create</Button>
         </div>
       </form>
     </Modal>

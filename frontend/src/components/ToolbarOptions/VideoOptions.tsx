@@ -27,13 +27,13 @@ export const VideoOptions = (props: VideoOptionProps) => {
       />
       <div className="flex items-center gap-3">
         <span className="text-sm w-12">URL</span>
-        <Input type="text" id={`url-${props.selectedElement.id}`} value={props.videoUrl} onChange={props.setVideoUrl} className="input-xs w-full" />
+        <Input name="url" type="text" id={`url-${props.selectedElement.id}`} value={props.videoUrl} onChange={props.setVideoUrl} className="input-xs w-full" />
       </div>
       <div className="flex items-center gap-3">
         <span className="text-sm w-12">Autoplay</span>
-        <Checkbox id="autoplay" label="" checked={props.autoplay} onChange={props.setAutoplay} className="toggle-xs" />
+        <Checkbox name="autoplay" id="autoplay" label="" checked={props.autoplay} onChange={props.setAutoplay} className="toggle-xs" />
       </div>
-      <Button onClick={props.handleUpdateVideo} className="btn-xs">Update Video</Button>
+      <Button name="update-video" onClick={props.handleUpdateVideo} className="btn-xs">Update Video</Button>
     </div>
   );
 };

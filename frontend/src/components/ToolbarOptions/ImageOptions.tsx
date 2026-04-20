@@ -28,6 +28,7 @@ export const ImageOptions = (props: ImageOptionsProps) => {
       <div className="flex gap-1 flex-col">
         <span className="text-sm w-12">Description</span>
         <Input 
+          name=""
           type="text" 
           id={`alt-${props.selectedElement.id}`} 
           value={props.imageDescription}
@@ -40,7 +41,7 @@ export const ImageOptions = (props: ImageOptionsProps) => {
         value={props.imageSource}
         onChange={props.setImageSource}
       />
-      <Button onClick={props.handleUpdateImage} className="btn-xs">Update Image</Button>
+      <Button name="update-image" onClick={props.handleUpdateImage} className="btn-xs">Update Image</Button>
     </div>
   )
 }

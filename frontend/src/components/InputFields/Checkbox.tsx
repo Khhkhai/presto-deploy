@@ -3,6 +3,7 @@ type CheckboxProps = {
   checked?: boolean;
   onChange?: (_value: boolean) => void;
   id: string;
+  name: string;
   className?: string;
   required?: boolean;
 }
@@ -18,6 +19,7 @@ export const Checkbox = (props: CheckboxProps) => {
 
       <input
         id={props.id}
+        name={props.name}
         type="checkbox"
         checked={props.checked}
         onChange={(e) => props.onChange?.(e.target.checked)}

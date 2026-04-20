@@ -18,7 +18,7 @@ export const ErrorModalProvider = ({ children }: { children: React.ReactNode }) 
       <Modal open={isOpen} onClose={() => setIsOpen(false)} title="Error">
         <p>{errorMessage}</p>
         <div className="flex justify-end">
-          <Button onClick={() => setIsOpen(false)}>Cancel</Button>
+          <Button name="error-cancel" onClick={() => setIsOpen(false)}>Cancel</Button>
         </div>
       </Modal>
     </ErrorModalContext.Provider>

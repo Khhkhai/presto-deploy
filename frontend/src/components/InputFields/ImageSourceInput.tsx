@@ -24,6 +24,7 @@ export const ImageSourceInput = React.forwardRef<FileInputHandle, ImageSourceInp
       <>
         <div className="tabs tabs-boxed">
           <Button
+            name="upload-file"
             className={`tab ${value.type === 'file' ? 'tab-active' : ''}`}
             onClick={() => setType('file')}
           >
@@ -31,6 +32,7 @@ export const ImageSourceInput = React.forwardRef<FileInputHandle, ImageSourceInp
           </Button>
 
           <Button
+            name="upload-url"
             className={`tab ${value.type === 'url' ? 'tab-active' : ''}`}
             onClick={() => setType('url')}
           >
@@ -40,6 +42,7 @@ export const ImageSourceInput = React.forwardRef<FileInputHandle, ImageSourceInp
 
         {value.type === 'file' ? (
           <FileInput
+            name="file"
             ref={ref}
             id="image"
             label=""
@@ -50,6 +53,7 @@ export const ImageSourceInput = React.forwardRef<FileInputHandle, ImageSourceInp
           />
         ) : (
           <Input
+            name="url"
             id="url"
             label=""
             type="text"

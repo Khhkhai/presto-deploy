@@ -204,24 +204,24 @@ export const Toolbar = ({elements, setDefaultBackground}: ToolbarProps) => {
 
   return (
     <div className="flex flex-col border w-65 gap-3 rounded-lg p-3 bg-base-200 overflow-auto">
-      <Button onClick={() => setCreateThemeModalOpen(true)} className="w-full aspect-square rounded-lg">Theme</Button>
+      <Button name="theme" onClick={() => setCreateThemeModalOpen(true)} className="w-full aspect-square rounded-lg">Theme</Button>
 
       <div className="grid grid-cols-2 gap-3">
-        <Button onClick={elements.createRect} className="w-full aspect-square rounded-lg">Shape</Button>
-        <Button onClick={elements.createText} className="w-full aspect-square rounded-lg">Text</Button>
-        <Button onClick={() => setCreateImageModalOpen(true)} className="w-full aspect-square rounded-lg">Image</Button>
-        <Button onClick={() => setCreateVideoModalOpen(true)} className="w-full aspect-square rounded-lg">Video</Button>
-        <Button onClick={() => setCreateCodeModalOpen(true)} className="w-full aspect-square rounded-lg">Code</Button>
+        <Button name="shape" onClick={elements.createRect} className="w-full aspect-square rounded-lg">Shape</Button>
+        <Button name="text" onClick={elements.createText} className="w-full aspect-square rounded-lg">Text</Button>
+        <Button name="image" onClick={() => setCreateImageModalOpen(true)} className="w-full aspect-square rounded-lg">Image</Button>
+        <Button name="video" onClick={() => setCreateVideoModalOpen(true)} className="w-full aspect-square rounded-lg">Video</Button>
+        <Button name="code" onClick={() => setCreateCodeModalOpen(true)} className="w-full aspect-square rounded-lg">Code</Button>
       </div>
 
       {elements.selectedElement && (
         <div className="flex flex-col gap-2">
           {renderTypeOptions()}
-          <Button onClick={() => { elements.updateElement(); } }>Save</Button>
+          <Button name="save" onClick={() => { elements.updateElement(); } }>Save</Button>
           <div className="flex items-center gap-2">
             <span className="text-sm w-12">Layer</span>
-            <Button onClick={() => elements.moveUpDown('up')}>^</Button>
-            <Button onClick={() => elements.moveUpDown('down')}>v</Button>
+            <Button name="move-up" onClick={() => elements.moveUpDown('up')}>^</Button>
+            <Button name="move-down" onClick={() => elements.moveUpDown('down')}>v</Button>
           </div>
         </div>
       )}
@@ -233,35 +233,35 @@ export const Toolbar = ({elements, setDefaultBackground}: ToolbarProps) => {
             onChange={setImageSource}
             ref={fileInputRef}
           />
-          <Input id="description" label="Description" type="text" value={imageDescription} onChange={setImageDescription} required={true}/>
-          <Input id="imageWidth" label="Width" type="number" value={imageWidth} onChange={setImageWidth} required={true} min={0} max={100}/>
-          <Input id="imageHeight" label="Height" type="number" value={imageHeight} onChange={setImageHeight} required={true} min={0} max={100}/>
+          <Input name="description" id="description" label="Description" type="text" value={imageDescription} onChange={setImageDescription} required={true}/>
+          <Input name="imageWidth" id="imageWidth" label="Width" type="number" value={imageWidth} onChange={setImageWidth} required={true} min={0} max={100}/>
+          <Input name="imageHeight" id="imageHeight" label="Height" type="number" value={imageHeight} onChange={setImageHeight} required={true} min={0} max={100}/>
           <div className="flex justify-end gap-2">
-            <Button type="button" onClick={() => { setCreateImageModalOpen(false); resetImageForm(); }}>Cancel</Button>
-            <Button type="submit">Create</Button>
+            <Button name="cancel" type="button" onClick={() => { setCreateImageModalOpen(false); resetImageForm(); }}>Cancel</Button>
+            <Button name="create" type="submit">Create</Button>
           </div>
         </form>
       </Modal>
 
       <Modal open={createVideoModalOpen} onClose={() => { setCreateVideoModalOpen(false); resetVideoForm(); }} title="Add Image">
         <form onSubmit={handleCreateVideo} className="flex flex-col gap-4">
-          <Input id="url" label="Url" type="text" value={videoUrl} onChange={setVideoUrl} required={true}/>
-          <Input id="videoWidth" label="Width" type="number" value={videoWidth} onChange={setVideoWidth} required={true} min={0} max={100}/>
-          <Input id="videoHeight" label="Height" type="number" value={videoHeight} onChange={setVideoHeight} required={true} min={0} max={100}/>
-          <Checkbox id="autoplay" label="Autoplay" checked={autoplay} onChange={setAutoplay} className="toggle"/>
+          <Input name="url" id="url" label="Url" type="text" value={videoUrl} onChange={setVideoUrl} required={true}/>
+          <Input name="videoWidth" id="videoWidth" label="Width" type="number" value={videoWidth} onChange={setVideoWidth} required={true} min={0} max={100}/>
+          <Input name="videoHeight" id="videoHeight" label="Height" type="number" value={videoHeight} onChange={setVideoHeight} required={true} min={0} max={100}/>
+          <Checkbox name="autoplay" id="autoplay" label="Autoplay" checked={autoplay} onChange={setAutoplay} className="toggle"/>
 
           <div className="flex justify-end gap-2">
-            <Button type="button" onClick={() => { setCreateVideoModalOpen(false); resetVideoForm(); }}>Cancel</Button>
-            <Button type="submit">Create</Button>
+            <Button name="cancel" type="button" onClick={() => { setCreateVideoModalOpen(false); resetVideoForm(); }}>Cancel</Button>
+            <Button name="create" type="submit">Create</Button>
           </div>
         </form>
       </Modal>
 
       <Modal open={createCodeModalOpen} onClose={() => { setCreateCodeModalOpen(false); resetCodeForm(); }} title="Add Image">
         <form onSubmit={handleCreateCode} className="flex flex-col gap-4">          
-          <Input id="codeWidth" label="Width" type="number" value={CodeWidth} onChange={setCodeWidth} required={true} min={0} max={100}/>
-          <Input id="codeHeight" label="Height" type="number" value={CodeHeight} onChange={setCodeHeight} required={true} min={0} max={100}/>
-          <Input id="codeFontSize" label="Font Size" type="number" value={codeFontSize} onChange={setCodeFontSize} required={true} min={0} max={100}/>
+          <Input name="codeWidth" id="codeWidth" label="Width" type="number" value={CodeWidth} onChange={setCodeWidth} required={true} min={0} max={100}/>
+          <Input name="codeHeight" id="codeHeight" label="Height" type="number" value={CodeHeight} onChange={setCodeHeight} required={true} min={0} max={100}/>
+          <Input name="codeFontSize" id="codeFontSize" label="Font Size" type="number" value={codeFontSize} onChange={setCodeFontSize} required={true} min={0} max={100}/>
           <div className="flex flex-col gap-1">
             <label className="text-sm">Code</label>
             <textarea
@@ -273,8 +273,8 @@ export const Toolbar = ({elements, setDefaultBackground}: ToolbarProps) => {
             />
           </div>
           <div className="flex justify-end gap-2">
-            <Button type="button" onClick={() => { setCreateCodeModalOpen(false); resetCodeForm(); }}>Cancel</Button>
-            <Button type="submit">Create</Button>
+            <Button name="cancel" type="button" onClick={() => { setCreateCodeModalOpen(false); resetCodeForm(); }}>Cancel</Button>
+            <Button name="create" type="submit">Create</Button>
           </div>
         </form>
       </Modal>

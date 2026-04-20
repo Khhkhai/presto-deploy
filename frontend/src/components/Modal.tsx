@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from "react";
-import { Button } from "./Button";
 
 type ModalProps = {
   open: boolean;
@@ -26,9 +25,6 @@ export const Modal = (props: ModalProps) => {
           <h3 className="font-bold text-lg">{props.title}</h3>
           <div className="py-4">{props.children}</div>
         </div>
-        <form method="dialog" className="modal-backdrop">
-          <Button type="button" onClick={props.onClose}>close</Button>
-        </form>
       </dialog>
     </>
   );
