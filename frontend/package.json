@@ -10,7 +10,8 @@
     "lint-fix": "eslint . --fix",
     "tsc": "tsc -b --noEmit",
     "preview": "vite preview",
-    "cypress": "cypress open"
+    "cypress": "cypress open",
+    "test": "cypress run"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.2.2",

@@ -39,8 +39,8 @@ export const Toolbar = ({elements, setDefaultBackground}: ToolbarProps) => {
   // Coode Element States
   const [createCodeModalOpen, setCreateCodeModalOpen] = useState(false);
   const [code, setCode] = useState('');
-  const [CodeWidth, setCodeWidth] = useState('');
-  const [CodeHeight, setCodeHeight] = useState('');
+  const [codeWidth, setCodeWidth] = useState('');
+  const [codeHeight, setCodeHeight] = useState('');
   const [codeFontSize, setCodeFontSize] = useState('');
 
   // Background Image  States
@@ -121,7 +121,7 @@ export const Toolbar = ({elements, setDefaultBackground}: ToolbarProps) => {
   const handleCreateCode = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!code.trim()) return;
-    elements.createCode(code.trim(), CodeWidth, CodeHeight, codeFontSize);
+    elements.createCode(code.trim(), codeWidth, codeHeight, codeFontSize);
     setCreateCodeModalOpen(false);
     resetCodeForm();
   };
@@ -203,10 +203,10 @@ export const Toolbar = ({elements, setDefaultBackground}: ToolbarProps) => {
   }
 
   return (
-    <div className="flex flex-col border w-65 gap-3 rounded-lg p-3 bg-base-200 overflow-auto">
+    <div className="flex flex-col border w-full md:w-64 gap-3 rounded-lg p-3 bg-base-200 overflow-auto">
       <Button name="theme" onClick={() => setCreateThemeModalOpen(true)} className="w-full aspect-square rounded-lg">Theme</Button>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-3 md:grid-cols-2 gap-3 w-full">
         <Button name="shape" onClick={elements.createRect} className="w-full aspect-square rounded-lg">Shape</Button>
         <Button name="text" onClick={elements.createText} className="w-full aspect-square rounded-lg">Text</Button>
         <Button name="image" onClick={() => setCreateImageModalOpen(true)} className="w-full aspect-square rounded-lg">Image</Button>
@@ -220,8 +220,8 @@ export const Toolbar = ({elements, setDefaultBackground}: ToolbarProps) => {
           <Button name="save" onClick={() => { elements.updateElement(); } }>Save</Button>
           <div className="flex items-center gap-2">
             <span className="text-sm w-12">Layer</span>
-            <Button name="move-up" onClick={() => elements.moveUpDown('up')}>^</Button>
-            <Button name="move-down" onClick={() => elements.moveUpDown('down')}>v</Button>
+            <Button name="move-up" aria-label="Move element up" onClick={() => elements.moveUpDown('up')}>^</Button>
+            <Button name="move-down" aria-label="Move element down" onClick={() => elements.moveUpDown('down')}>v</Button>
           </div>
         </div>
       )}
@@ -243,7 +243,7 @@ export const Toolbar = ({elements, setDefaultBackground}: ToolbarProps) => {
         </form>
       </Modal>
 
-      <Modal open={createVideoModalOpen} onClose={() => { setCreateVideoModalOpen(false); resetVideoForm(); }} title="Add Image">
+      <Modal open={createVideoModalOpen} onClose={() => { setCreateVideoModalOpen(false); resetVideoForm(); }} title="Add Video">
         <form onSubmit={handleCreateVideo} className="flex flex-col gap-4">
           <Input name="url" id="url" label="Url" type="text" value={videoUrl} onChange={setVideoUrl} required={true}/>
           <Input name="videoWidth" id="videoWidth" label="Width" type="number" value={videoWidth} onChange={setVideoWidth} required={true} min={0} max={100}/>
@@ -257,10 +257,10 @@ export const Toolbar = ({elements, setDefaultBackground}: ToolbarProps) => {
         </form>
       </Modal>
 
-      <Modal open={createCodeModalOpen} onClose={() => { setCreateCodeModalOpen(false); resetCodeForm(); }} title="Add Image">
+      <Modal open={createCodeModalOpen} onClose={() => { setCreateCodeModalOpen(false); resetCodeForm(); }} title="Add Code">
         <form onSubmit={handleCreateCode} className="flex flex-col gap-4">          
-          <Input name="codeWidth" id="codeWidth" label="Width" type="number" value={CodeWidth} onChange={setCodeWidth} required={true} min={0} max={100}/>
-          <Input name="codeHeight" id="codeHeight" label="Height" type="number" value={CodeHeight} onChange={setCodeHeight} required={true} min={0} max={100}/>
+          <Input name="codeWidth" id="codeWidth" label="Width" type="number" value={codeWidth} onChange={setCodeWidth} required={true} min={0} max={100}/>
+          <Input name="codeHeight" id="codeHeight" label="Height" type="number" value={codeHeight} onChange={setCodeHeight} required={true} min={0} max={100}/>
           <Input name="codeFontSize" id="codeFontSize" label="Font Size" type="number" value={codeFontSize} onChange={setCodeFontSize} required={true} min={0} max={100}/>
           <div className="flex flex-col gap-1">
             <label className="text-sm">Code</label>

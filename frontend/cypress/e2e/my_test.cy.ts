@@ -1,5 +1,5 @@
 describe('user alternate path', () => {
-  const email = 'test1@example.com';
+  const email = 'test2@example.com';
   const password = 'password';
   const name = 'Test User';
 
@@ -36,8 +36,6 @@ describe('user alternate path', () => {
     cy.get('button[name="register-button"]').click();
     cy.url().should('include', '/dashboard');
   });
-
-
 
   it('should delete a single slide successfully', () => {
     login();

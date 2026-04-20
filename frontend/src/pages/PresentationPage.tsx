@@ -66,7 +66,7 @@ export const PresentationPage = () => {
             </svg>
             <div id="edit-thumbnail" onClick={() => setThumbnailModalOpen(true)} className='w-10 h-10 border'>
               {presentation?.thumbnail && (
-                <img src={presentation.thumbnail} />
+                <img src={presentation.thumbnail} alt="Presentation thumbnail"/>
               )}
             </div>
           </div>
@@ -75,11 +75,11 @@ export const PresentationPage = () => {
 
             <Button name="view-slides" onClick={() => setViewSlideModalOpen(true)}>View Slides</Button>
 
-            <Button name="delete" onClick={() => setDeleteModalOpen(true)}>Delete</Button>
+            <Button name="delete" onClick={() => setDeleteModalOpen(true)} aria-label="Delete presentation">Delete</Button>
           </div>
         </div>
 
-        <div className="flex flex-1 overflow-hidden p-3 gap-3">
+        <div className="flex flex-col md:flex-row flex-1 overflow-hidden p-3 gap-3">
           <Toolbar elements={element} setDefaultBackground={setDefaultBackground}/>
 
           <div className='flex-[3] flex flex-col overflow-hidden p-4 gap-2'>
@@ -166,7 +166,7 @@ export const PresentationPage = () => {
       </Modal>
 
       <Modal open={viewSlideModalOpen} onClose={() => setViewSlideModalOpen(false)} title="View Slides">
-        <div className="grid grid-cols-3 gap-3 max-h-[70vh] overflow-y-auto mt-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 max-h-[70vh] overflow-y-auto mt-4">
           {slides.map((slide, i) => (
             <div
               key={slide.id}

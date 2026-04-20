@@ -108,11 +108,11 @@ describe('user happy path', () => {
     cy.contains('p', 'Slide 3 of 3').should('be.visible');
 
     cy.get('button[name="previous-slide-button"]').click();
-    cy.wait(5000);
+    cy.wait(500);
     cy.contains('p', 'Slide 2 of 3').should('be.visible');
 
     cy.get('button[name="previous-slide-button"]').click();
-    cy.wait(5000);
+    cy.wait(500);
     cy.contains('p', 'Slide 1 of 3').should('be.visible');
 
     deletePresentation();
