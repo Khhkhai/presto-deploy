@@ -58,30 +58,30 @@ export const reset = () => {
   admins = {};
 };
 
-export const initialize = async () => {
-  try {
-    if (USE_VERCEL_KV) {
-      const response = await fetch(`${KV_REST_API_URL}/get/admins`, {
-        headers: {
-          Authorization: `Bearer ${KV_REST_API_TOKEN}`,
-        },
+try {
+  if (USE_VERCEL_KV) {
+    // Setup default admin object in KV DB
+    save();
+
+    // Read from Vercel KV
+    fetch(`${KV_REST_API_URL}/get/admins`, {
+      headers: {
+        Authorization: `Bearer ${KV_REST_API_TOKEN}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        admins = JSON.parse(data.result)["admins"];
       });
-      const data = await response.json();
-      if (data.result) {
-        admins = JSON.parse(data.result);
-      } else {
-        console.log("No KV data found, initialising empty store.");
-        await update(admins);
-      }
-    } else {
-      const data = JSON.parse(fs.readFileSync(DATABASE_FILE));
-      admins = data.admins;
-    }
-  } catch (error) {
-    console.log("WARNING: No database found, creating a new one");
-    await update(admins);
+  } else {
+    // Read from local file
+    const data = JSON.parse(fs.readFileSync(DATABASE_FILE));
+    admins = data.admins;
   }
-};
+} catch(error) {
+  console.log("WARNING: No database found, create a new one");
+  save();
+}
 
 /***************************************************************
                        Helper Functions
